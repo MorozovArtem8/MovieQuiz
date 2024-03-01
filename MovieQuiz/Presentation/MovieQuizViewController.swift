@@ -8,7 +8,7 @@ final class MovieQuizViewController: UIViewController {
 }
 
 /*
- Mock-данные
+  1Mock-данные
  
  
  Картинка: The Godfather
