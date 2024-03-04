@@ -1,7 +1,10 @@
 import Foundation
 
 extension Date {
-    var dateTimeString: String { DateFormatter.defaultDateTime.string(from: self) }
+    static var dateTimeString: String {
+        DateFormatter.defaultDateTime.string(from: Date())
+    }
+    
 }
 
 private extension DateFormatter {
@@ -11,3 +14,4 @@ private extension DateFormatter {
         return dateFormatter
     }()
 }
+
