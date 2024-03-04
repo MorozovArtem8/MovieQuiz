@@ -34,14 +34,11 @@ final class MovieQuizViewController: UIViewController {
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     
-    
-    
-    
     //MARK: IBOutlet
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var textLabel: UILabel!
-    
+    @IBOutlet private var buttons: [UIButton]!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -49,7 +46,6 @@ final class MovieQuizViewController: UIViewController {
         let currentQuestion = questions[currentQuestionIndex]
         let currentStepViewMode = convert(model: currentQuestion)
         show(quiz: currentStepViewMode)
-        
         
     }
     
@@ -64,19 +60,27 @@ final class MovieQuizViewController: UIViewController {
         
     }
     
-    
     //MARK: func
     
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
         }
+        
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.yGreen.cgColor : UIColor.yRed.cgColor
+        buttons.forEach {
+            
+            $0.isEnabled = false
+        }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.showNextQuestionOrResults()
             self.imageView.layer.borderWidth = 0
+            self.buttons.forEach {
+                $0.isEnabled = true
+            }
+            self.showNextQuestionOrResults()
         }
         
     }
@@ -90,7 +94,6 @@ final class MovieQuizViewController: UIViewController {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
-        //currentQuestionIndex += 1
     }
     
     private func show(quiz result: QuizResultsViewModel) {
