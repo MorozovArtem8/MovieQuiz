@@ -18,11 +18,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-// Удаление сохраненных данных для тестирования
-//        UserDefaults.standard.removeObject(forKey: "gamesCount")
-//        UserDefaults.standard.removeObject(forKey: "bestGame")
-//        UserDefaults.standard.removeObject(forKey: "total")
-//        UserDefaults.standard.removeObject(forKey: "correct")
         let questionFactory = QuestionFactory()
         questionFactory.delegate = self
         self.questionFactory = questionFactory
@@ -71,7 +66,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             $0.isEnabled = false
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self]  in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self]  in
             guard let self = self else {return}
             self.imageView.layer.borderWidth = 0
             self.buttons.forEach {
@@ -95,11 +90,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func show(quiz result: QuizResultsViewModel) {
         statisticService?.store(correct: correctAnswers, total: questionAmount)
-        // Через конструкцию if let пытаемся вытащить все данные из statisticService
         if let bestGame = statisticService?.bestGame.correct, let date = statisticService?.bestGame.date, let gamesCount = statisticService?.gamesCount, let totalAccuracy = statisticService?.totalAccuracy {
-            // Если все данные удалось извлечь создаем новый текст в алерте
-            let newText = "\(result.text) \n Количество сыгранных квизов: \(gamesCount) \n Рекорд \(bestGame)/10 \(date.dateTimeString) \n Средняя точность: \(String(format: "%.2f", totalAccuracy))%"
-            
+            let newText = """
+            \(result.text)
+            Количество сыгранных квизов: \(gamesCount)
+            Рекорд \(bestGame)/10 (\(date.dateTimeString))
+            Средняя точность: \(String(format: "%.2f", totalAccuracy))%
+            """
             let alertModel = AlertModel(title: result.title, message: newText, buttonText: result.buttonText, completion: {
                 self.correctAnswers = 0
                 self.currentQuestionIndex = 0
