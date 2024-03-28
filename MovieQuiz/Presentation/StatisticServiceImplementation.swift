@@ -16,17 +16,12 @@ final class StatisticServiceImplementation: StatisticService {
     var gamesCount: Int {
         
         get {
-            // если пытаемся получить значение которого нет - запишется и вернется 0
-            guard let gameInt = userDefaults.object(forKey: Keys.gamesCount.rawValue) else {
-                userDefaults.set(0, forKey: Keys.gamesCount.rawValue)
-                return 0
-            }
-            return gameInt as! Int
+            return userDefaults.integer(forKey: Keys.gamesCount.rawValue) 
         }
         
         set {
-            //устанавливаем новое значение
             userDefaults.set(newValue, forKey: Keys.gamesCount.rawValue)
+            
         }
     }
     
@@ -59,9 +54,7 @@ final class StatisticServiceImplementation: StatisticService {
             userDefaults.set(Double(count), forKey: Keys.correct.rawValue)
             userDefaults.set(Double(amount), forKey: Keys.total.rawValue)
         }
-        // Добавляем  + 1 к количеству игру
         gamesCount += 1
-        // Создаем новый экземпляр GameRecord и сравнием с сохраненным
         let record = GameRecord(correct: count, total: amount, date: Date())
         if !bestGame.isBetterThan(record) {
             bestGame = record
