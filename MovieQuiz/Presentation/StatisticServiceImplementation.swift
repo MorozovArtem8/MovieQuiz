@@ -1,7 +1,7 @@
 import UIKit
 
 final class StatisticServiceImplementation: StatisticService {
-    //fdsfdsds fdsfds
+    
     private enum Keys: String {
         case correct, total, bestGame, gamesCount
     }
@@ -41,7 +41,6 @@ final class StatisticServiceImplementation: StatisticService {
             }
             
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
-            print("сохранил \(data)")
         }
     }
     
