@@ -15,7 +15,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private var buttons: [UIButton]!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -89,9 +89,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         
+        QuizStepViewModel(
+            image: UIImage(data: model.image) ?? UIImage(),
+            question: model.text,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)"
+        )
         
-        let quizStepViewModel = QuizStepViewModel(image: UIImage(data: model.image) ?? UIImage(), question: model.text, questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)")
-        return quizStepViewModel
     }
     
     private func show(quiz step: QuizStepViewModel) {
@@ -102,14 +105,22 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func show(quiz result: QuizResultsViewModel) {
         statisticService?.store(correct: correctAnswers, total: questionAmount)
-        if let bestGame = statisticService?.bestGame.correct, let date = statisticService?.bestGame.date, let gamesCount = statisticService?.gamesCount, let totalAccuracy = statisticService?.totalAccuracy {
+        if let bestGame = statisticService?.bestGame.correct, 
+            let date = statisticService?.bestGame.date,
+            let gamesCount = statisticService?.gamesCount,
+            let totalAccuracy = statisticService?.totalAccuracy {
+            
             let newText = """
             \(result.text)
             Количество сыгранных квизов: \(gamesCount)
             Рекорд \(bestGame)/10 (\(date.dateTimeString))
             Средняя точность: \(String(format: "%.2f", totalAccuracy))%
             """
-            let alertModel = AlertModel(title: result.title, message: newText, buttonText: result.buttonText, completion: {
+            let alertModel = AlertModel(
+                title: result.title,
+                message: newText,
+                buttonText: result.buttonText, completion: {
+                    
                 self.correctAnswers = 0
                 self.currentQuestionIndex = 0
                 self.questionFactory?.requestNextQuestion()
@@ -145,8 +156,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showNetworkError(message: String) {
         hideLoadingIndicator()
         
-        let alertModel = AlertModel(title: "Ошибка", message: message, buttonText: "Попробовать ещё раз") { [weak self] in
-            guard let self = self else {return}
+        let alertModel = AlertModel(
+            title: "Ошибка",
+            message: message,
+            buttonText: "Попробовать ещё раз"
+        ) { [weak self] in
+            
+            guard let self else {return}
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
             self.questionFactory?.loadData()
