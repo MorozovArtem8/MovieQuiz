@@ -41,7 +41,6 @@ final class StatisticServiceImplementation: StatisticService {
             }
             
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
-            print("сохранил \(data)")
         }
     }
     
