@@ -25,6 +25,7 @@ struct MoviesLoader: MoviesLoading {
                     handler(.failure(error))
                 }
             case .failure(let error):
+                print(error)
                 handler(.failure(error))
             }
         }

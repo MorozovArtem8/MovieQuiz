@@ -4,6 +4,7 @@ struct NetworkClient {
     
     private enum NetworkError: Error {
         case codeError
+        
     }
 
     func fetch(url: URL, handler: @escaping (Result<Data, Error>) -> Void) {
@@ -11,6 +12,7 @@ struct NetworkClient {
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
+                print(error)
                 handler(.failure(error))
                 return
             }
