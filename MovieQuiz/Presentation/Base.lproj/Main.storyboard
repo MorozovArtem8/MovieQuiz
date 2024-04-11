@@ -123,16 +123,15 @@
                                     <constraint firstAttribute="trailing" secondItem="Erc-G2-Qsh" secondAttribute="trailing" id="hnh-p1-bxQ"/>
                                 </constraints>
                             </stackView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="isw-YI-zrP">
-                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="isw-YI-zrP">
+                                <rect key="frame" x="186" y="425" width="20" height="2"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstItem="isw-YI-zrP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2dV-vC-rEX"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="4Ez-3x-LeI" secondAttribute="bottom" id="8gS-bx-imR"/>
-                            <constraint firstItem="isw-YI-zrP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="CnY-xj-z3P"/>
                             <constraint firstItem="4Ez-3x-LeI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="IsK-uC-p5a"/>
                             <constraint firstItem="4Ez-3x-LeI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="QMt-n2-eXS"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4Ez-3x-LeI" secondAttribute="trailing" constant="20" id="lx1-Df-Q8o"/>

@@ -24,10 +24,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         statisticService = StatisticServiceImplementation()
         showLoadingIndicator()
         questionFactory?.loadData()
+        activityIndicator.style = .large
     }
     
     //MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
+        hideLoadingIndicator()
         guard let question = question else {
             return
         }
@@ -39,12 +41,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true // скрываем индикатор загрузки
         questionFactory?.requestNextQuestion()
     }
     
     func didFailToLoadData(with error: any Error) {
         showNetworkError(message: error.localizedDescription)
+        print(error.localizedDescription)
+    }
+    
+    func didFailToLoadImage(with error: any Error) {
+        showLoadImageError(message: error.localizedDescription)
     }
     
     //MARK: IBAction
@@ -76,7 +82,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             $0.isEnabled = false
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self]  in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self]  in
             guard let self = self else {return}
             self.imageView.layer.borderWidth = 0
             self.buttons.forEach {
@@ -105,10 +111,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func show(quiz result: QuizResultsViewModel) {
         statisticService?.store(correct: correctAnswers, total: questionAmount)
-        if let bestGame = statisticService?.bestGame.correct, 
+        if let bestGame = statisticService?.bestGame.correct,
             let date = statisticService?.bestGame.date,
-            let gamesCount = statisticService?.gamesCount,
-            let totalAccuracy = statisticService?.totalAccuracy {
+           let gamesCount = statisticService?.gamesCount,
+           let totalAccuracy = statisticService?.totalAccuracy {
             
             let newText = """
             \(result.text)
@@ -119,12 +125,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             let alertModel = AlertModel(
                 title: result.title,
                 message: newText,
-                buttonText: result.buttonText, completion: {
-                    
-                self.correctAnswers = 0
-                self.currentQuestionIndex = 0
-                self.questionFactory?.requestNextQuestion()
-            })
+                buttonText: result.buttonText,
+                completion: {
+                    self.correctAnswers = 0
+                    self.currentQuestionIndex = 0
+                    self.questionFactory?.requestNextQuestion()
+                })
             
             let alertPresentor = AlertPresenter(viewController: self)
             alertPresentor.show(alertModel: alertModel)
@@ -133,6 +139,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func showNextQuestionOrResults() {
+        showLoadingIndicator()
         if currentQuestionIndex == questionAmount - 1 {
             let text = correctAnswers == questionAmount ? "Поздравляем, вы ответили на 10 из 10!" :  "Ваш результат \(correctAnswers)/10"
             let resultViewModel = QuizResultsViewModel(title: "Этот раунд окончен!", text:  text, buttonText: "Сыграть еще раз")
@@ -157,7 +164,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         hideLoadingIndicator()
         
         let alertModel = AlertModel(
-            title: "Ошибка",
+            title: "Что то пошло не так",
             message: message,
             buttonText: "Попробовать ещё раз"
         ) { [weak self] in
@@ -166,6 +173,22 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
             self.questionFactory?.loadData()
+        }
+        let alertPresenter = AlertPresenter(viewController: self)
+        alertPresenter.show(alertModel: alertModel)
+    }
+    
+    private func showLoadImageError(message: String) {
+        hideLoadingIndicator()
+        
+        let alertModel = AlertModel(
+            title: "Что то пошло не так",
+            message: "Невозможно загрузить куартинку",
+            buttonText: "Попробовать ещё раз"
+        ) { [weak self] in
+            
+            guard let self else {return}
+            self.questionFactory?.requestNextQuestion()
         }
         let alertPresenter = AlertPresenter(viewController: self)
         alertPresenter.show(alertModel: alertModel)

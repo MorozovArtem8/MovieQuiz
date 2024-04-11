@@ -53,14 +53,15 @@ class QuestionFactory: QuestionFactoryProtocol {
             do {
                 imageData = try Data(contentsOf: movie.resizeImageURL)
             } catch {
+                DispatchQueue.main.async {
+                    self.delegate?.didFailToLoadImage(with: error)
+                }
                 print("Failed to load image")
             }
             
             let rating = Float(movie.rating) ?? 0
             let intRating = Int(rating)
-            
-            let raitingForQuestion: Int = (intRating...intRating + 2).randomElement() ?? intRating
-            print(raitingForQuestion)
+            let raitingForQuestion: Int = (intRating...intRating + 1).randomElement() ?? intRating
             let text = "Рейтинг этого фильма больше чем \(raitingForQuestion)?"
             let correctAnswer = rating >= Float(raitingForQuestion)
             
