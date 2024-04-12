@@ -5,7 +5,11 @@ protocol MoviesLoading {
 }
 
 struct MoviesLoader: MoviesLoading {
-    private let networkClient = NetworkClient()
+    private let networkClient: NetworkRouting
+    
+    init(networkClient: NetworkRouting = NetworkClient()) {
+        self.networkClient = networkClient
+    }
     
     private var mostPopularMoviesUrl: URL {
         guard let url = URL(string: "https://tv-api.com/en/API/Top250Movies/k_zcuw1ytf") else {
@@ -20,6 +24,9 @@ struct MoviesLoader: MoviesLoading {
             case .success(let data):
                 do {
                     let mostPopularMovies = try JSONDecoder().decode(MostPopularMovies.self, from: data)
+                    if mostPopularMovies.errorMessage == "Invalid API Key" || mostPopularMovies.items.count == 0 {
+                        throw NSError(domain: "API fail", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid API Key or Empty List"])
+                    }
                     handler(.success(mostPopularMovies))
                 } catch {
                     handler(.failure(error))

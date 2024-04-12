@@ -173,6 +173,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
             self.questionFactory?.loadData()
+            showLoadingIndicator()
         }
         let alertPresenter = AlertPresenter(viewController: self)
         alertPresenter.show(alertModel: alertModel)
