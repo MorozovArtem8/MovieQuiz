@@ -105,5 +105,4 @@ struct StubNetworkClient: NetworkRouting {
                 """.data(using: .utf8) ?? Data()
     }
     
-    
 }
