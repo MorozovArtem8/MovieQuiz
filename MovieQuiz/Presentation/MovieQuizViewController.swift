@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
     //MARK: IBOutlet
     @IBOutlet  weak var imageView: UIImageView!
@@ -60,6 +60,7 @@ final class MovieQuizViewController: UIViewController {
             self?.presenter.restartGame()
         }
         alert.addAction(action)
+        alert.view.accessibilityIdentifier = "Alert"
         self.present(alert, animated: true, completion: nil)
         
     }
@@ -79,7 +80,7 @@ final class MovieQuizViewController: UIViewController {
         
         let alertModel = AlertModel(
             title: "Что то пошло не так",
-            message: message,
+            message: "Невозможно загрузить данные",
             buttonText: "Попробовать ещё раз"
         ) { [weak self] in
             
@@ -96,7 +97,7 @@ final class MovieQuizViewController: UIViewController {
         
         let alertModel = AlertModel(
             title: "Что то пошло не так",
-            message: "Невозможно загрузить куартинку",
+            message: "Невозможно загрузить картинку",
             buttonText: "Попробовать ещё раз"
         ) { [weak self] in
             

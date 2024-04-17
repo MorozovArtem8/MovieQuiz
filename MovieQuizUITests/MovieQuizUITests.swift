@@ -59,11 +59,11 @@ final class MovieQuizUITests: XCTestCase {
         XCTAssertEqual(indexLabel.label, "2/10")
     }
     
-    func testAlertPresentor() {
+    func testAlertPresenter() {
         sleep(1)
         for _ in 1...10 {
             app.buttons["No"].tap()
-            sleep(1)
+            sleep(2)
         }
         sleep(1)
         let alert = app.alerts["Alert"]
