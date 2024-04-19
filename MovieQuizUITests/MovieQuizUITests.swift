@@ -80,7 +80,7 @@ final class MovieQuizUITests: XCTestCase {
         sleep(1)
         for _ in 1...10 {
             app.buttons["No"].tap()
-            sleep(1)
+            sleep(2)
         }
         sleep(1)
         let alert = app.alerts["Alert"]

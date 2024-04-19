@@ -2,7 +2,7 @@ import UIKit
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
     
-    private let statisticService: StatisticService!
+    private let statisticService: StatisticService
     private var questionFactory: QuestionFactoryProtocol?
     private weak var viewController: MovieQuizViewControllerProtocol?
     
@@ -51,15 +51,13 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         viewController?.showLoadImageError(message: message)
     }
     
-    // MARK: QuestionFactoryDelegate
+    // MARK: Func
     
     func reloadingDataFromServer() {
-        //Функция используется для повторной попытки загрузки данных в случае ошибки (Кнопка алерта попробовать снова при ошибке запроса)
         questionFactory?.loadData()
     }
     
     func reloadingImage() {
-        //Функция используется для повторной попытки загрузки картинки (Кнопка алерта попробовать снова при фейле загрузки картинки)
         questionFactory?.requestNextQuestion()
     }
     

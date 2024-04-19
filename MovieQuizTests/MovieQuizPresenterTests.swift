@@ -46,8 +46,5 @@ final class MovieQuizPresenterTests: XCTestCase {
         XCTAssertEqual(question.text, viewModel.question)
         XCTAssertEqual(viewModel.questionNumber, "1/10")
         
-        
     }
-
-
 }
