@@ -9,7 +9,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet private var buttons: [UIButton]!
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
-    private var presenter: MovieQuizPresenter!
+    private var presenter: MovieQuizPresenter?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -22,11 +22,11 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     
     //MARK: IBAction
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked()
+        presenter?.noButtonClicked()
     }
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        presenter.yesButtonClicked()
+        presenter?.yesButtonClicked()
         
     }
     
@@ -53,11 +53,11 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     func show(quiz result: QuizResultsViewModel) {
-        let message = presenter.makeResultMessage()
+        let message = presenter?.makeResultMessage()
         
         let alert = UIAlertController (title: result.title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            self?.presenter.restartGame()
+            self?.presenter?.restartGame()
         }
         alert.addAction(action)
         alert.view.accessibilityIdentifier = "Alert"
@@ -85,7 +85,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         ) { [weak self] in
             
             guard let self else {return}
-            self.presenter.reloadingDataFromServer()
+            self.presenter?.reloadingDataFromServer()
             showLoadingIndicator()
         }
         let alertPresenter = AlertPresenter(viewController: self)
@@ -102,7 +102,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         ) { [weak self] in
             
             guard let self else {return}
-            self.presenter.reloadingImage()
+            self.presenter?.reloadingImage()
             showLoadingIndicator()
         }
         let alertPresenter = AlertPresenter(viewController: self)
