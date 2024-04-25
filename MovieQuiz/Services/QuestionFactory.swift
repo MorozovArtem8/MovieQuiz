@@ -41,6 +41,7 @@ class QuestionFactory: QuestionFactoryProtocol {
             } catch {
                 DispatchQueue.main.async {
                     self.delegate?.didFailToLoadImage(with: error)
+                    return
                 }
             }
             
